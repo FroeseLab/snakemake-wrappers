@@ -1,3 +1,8 @@
+rule all:
+    input:
+        "a.reheader.bcf",
+        "a.reheader_map.bcf"
+
 rule bcftools_reheader:
     input:
         vcf="a.bcf",
@@ -9,6 +14,23 @@ rule bcftools_reheader:
         "a.reheader.bcf",
     log:
         "reheader.log",
+    params:
+        uncompressed_bcf=False,
+        extra="",  # optional parameters for bcftools reheader
+        view_extra="",  # optional parameters for bcftools view
+    threads: 2
+    wrapper:
+        "master/bio/bcftools/reheader"
+
+rule bcftools_reheader_map:
+    input:
+        vcf="a.bcf",
+        ## file containing a whitespace separated mapping of old to new sample names
+        samples="samples_map.tsv",
+    output:
+        "a.reheader_map.bcf",
+    log:
+        "reheader_map.log",
     params:
         uncompressed_bcf=False,
         extra="",  # optional parameters for bcftools reheader
