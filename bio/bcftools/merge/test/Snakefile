@@ -10,3 +10,12 @@ rule bcftools_merge:
         extra="",  # optional parameters for bcftools concat (except -o)
     wrapper:
         "master/bio/bcftools/merge"
+
+use rule bcftools_merge as bcftools_merge_index with:
+    input:
+        calls=["a.bcf", "b.bcf"],
+        indices=["a.bcf.csi", "b.bcf.csi"],
+    output:
+        "all_index.bcf"
+    log:
+        "all_index.log"
